@@ -1,2 +1,2 @@
-# flyingeagle1015 blog
-hexo blog with yilia theme
+# flyingeagle's hexo blog source
+blog with yilia theme
