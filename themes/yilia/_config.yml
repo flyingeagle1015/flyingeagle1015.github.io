@@ -4,7 +4,6 @@ menu:
   主页: /
   开发: /categories/develop
   应用: /categories/application
-  生活: /categories/life
 
 # SubNav
 subnav:
@@ -85,4 +84,4 @@ smart_menu:
 friends:
   ChinaUnix: http://blog.chinaunix.net/uid/27769897.html
 
-aboutme: <p>水镜先生<br>软件工程师, 09年趟进软件开发这片汪洋。<br>精通C/C++软件开发，熟悉Windows桌面、Linux服务器开发，主攻网络开发。</p>
+aboutme: <p>水镜先生<br>软件工程师, 09年趟进软件开发这片汪洋。<br>精通C/C++软件开发, 熟悉Windows桌面, 主攻Linux服务器开发、网络开发。</p>

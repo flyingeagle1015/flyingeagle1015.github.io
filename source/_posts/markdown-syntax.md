@@ -1,8 +1,7 @@
 ---
 title: markdown语法
 date: 2017-03-30 14:19:15
-tags: 
-  - markdown
+tags: [markdown]
 categories: [language]
 ---
 
