@@ -43,3 +43,8 @@ hexo deploy
 ###### 提交博文
 git commit -a -m 'new pages'; git push;
 
+###### 采用SSH key免密码提交
+git remote rm origin
+git remote add origin git@github.com:github_username/github_project.git
+git push origin
+
