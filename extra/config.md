@@ -28,7 +28,9 @@ sudo npm install -g cnpm --registry=https://registry.npm.taobao.org
 cd kbase; npm install
 
 ###### 写新博客
-hexo new
+hexo new 'new article title'  
+hexo new draft 'new draft article title'  
+草稿文章需要执行hexo publish 'title'发布到正式文章  
 
 ###### 生成博客
 hexo generate
