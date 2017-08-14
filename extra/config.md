@@ -7,7 +7,7 @@ cd kbase/extra;
 #解压ssh publickey
 #tar -zcf  - filename |openssl des3 -salt | dd of=id_rsa_github.des3
 dd if=id_rsa_github.des3 |openssl des3 -d | tar zxf -
-cp id_rsa_github.des3 $HOME/.ssh/
+cp id_rsa_github $HOME/.ssh/
 cat >> $HOME/.ssh/config <<EOF
 # github
 Host github.com
@@ -22,9 +22,9 @@ ssh -T git@github.com
 ```
 
 ###### 安装hexo相关包
-首先需要安装hexo（如果安装失败，切换到root后安装）：  
-sudo npm install hexo -g  
-sudo npm install -g cnpm --registry=https://registry.npm.taobao.org  
+首先需要安装hexo（可以设置npm config set prefix=$HOME/.npm-global）：
+npm install hexo -g
+npm install -g cnpm --registry=https://registry.npm.taobao.org
 cd kbase; npm install
 
 ###### 写新博客
