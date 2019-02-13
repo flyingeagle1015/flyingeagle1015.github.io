@@ -154,6 +154,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-python-deepcopy" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/13/python-deepcopy/">python deepcopy</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/13/python-deepcopy/" class="archive-article-date">
+  	<time datetime="2019-02-13T06:57:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h3><ul>
+<li><p>对于简单的object用shallow copy和deep copy没有区别:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; import copy</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; b = copy.copy(a)</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; c = copy.deepcopy(a)</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; id(a)</span><br><span class="line"><span class="number">139626388915464</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; id(b)</span><br><span class="line"><span class="number">139626389057352</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; id(c)</span><br><span class="line"><span class="number">139626389086280</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; a[<span class="number">1</span>] = <span class="number">11</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; a</span><br><span class="line">[<span class="number">1</span>, <span class="number">11</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; b</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; c</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于复杂的object如list中套着list的情况, shallow copy时子list并未从原object真的独立出来</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import copy</span><br><span class="line">&gt;&gt;&gt; a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt; id(a[<span class="number">4</span>])</span><br><span class="line"><span class="number">139626388917384</span></span><br><span class="line">&gt;&gt;&gt; id(a)</span><br><span class="line"><span class="number">139626389086408</span></span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; b = copy.copy(a)</span><br><span class="line">&gt;&gt;&gt; c = copy.deepcopy(a)</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; id(b)</span><br><span class="line"><span class="number">139626388915464</span></span><br><span class="line">&gt;&gt;&gt; id(b[<span class="number">4</span>])</span><br><span class="line"><span class="number">139626388917384</span>   # b[<span class="number">4</span>]和a[<span class="number">4</span>]引用同一个对象</span><br><span class="line">&gt;&gt;&gt; id(c)</span><br><span class="line"><span class="number">139626389057352</span></span><br><span class="line">&gt;&gt;&gt; id(c[<span class="number">4</span>])</span><br><span class="line"><span class="number">139626389086472</span></span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; a[<span class="number">4</span>][<span class="number">0</span>]=<span class="number">111</span></span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">111</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">111</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt; c</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/13/python-deepcopy/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-ssh_remotefile" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -606,6 +686,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">thinkphp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
             
             <div class="clearfix"></div>

@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>ssh远程服务器文件修改 | 水镜先生的博客</title>
+  <title>Archives: 2019 | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮难道还在服务器上配置一番???在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？常用的有这几个：    如果服务器有配置Samba, 采用磁盘映射的方式   如果文件少，直接用vim远程编辑,">
-<meta name="keywords" content="ssh">
-<meta property="og:type" content="article">
-<meta property="og:title" content="ssh远程服务器文件修改">
-<meta property="og:url" content="https://flyingeagle1015.github.io/2017/08/12/ssh_remotefile/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="水镜先生的博客">
+<meta property="og:url" content="https://flyingeagle1015.github.io/archives/2019/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
-<meta property="og:description" content="在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮难道还在服务器上配置一番???在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？常用的有这几个：    如果服务器有配置Samba, 采用磁盘映射的方式   如果文件少，直接用vim远程编辑,">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-02-13T05:35:53.248Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ssh远程服务器文件修改">
-<meta name="twitter:description" content="在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮难道还在服务器上配置一番???在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？常用的有这几个：    如果服务器有配置Samba, 采用磁盘映射的方式   如果文件少，直接用vim远程编辑,">
+<meta name="twitter:title" content="水镜先生的博客">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -157,103 +152,71 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-ssh_remotefile" class="article article-type-post " itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      ssh远程服务器文件修改
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/02/13/python-deepcopy/" class="archive-article-date">
+  	<time datetime="2019-02-13T06:57:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/02/13/python-deepcopy/">python deepcopy</a>
     </h1>
   
 
-        
-        <a href="/2017/08/12/ssh_remotefile/" class="archive-article-date">
-  	<time datetime="2017-08-12T14:11:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-12</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,<br>但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮<br>难道还在服务器上配置一番???<br>在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？<br>常用的有这几个：  </p>
-<ol>
-<li>如果服务器有配置Samba, 采用磁盘映射的方式  </li>
-<li>如果文件少，直接用vim远程编辑, 命令：vim scp://hostname//path/to/file  </li>
-<li>本地安装sshfs, 用sshfs映射到本地进行编辑<br>挂载:<br>  sshfs username@serverip:serverpath localpath // 如果配置ssh key可以实现自动化挂载<br>卸载:<br>  fusermount -u mountpath  </li>
-<li>本地修改，采用rsync同步到远程服务器  </li>
-</ol>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
+        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
         		</li>
       		
 		</ul>
 	</div>
 
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/02/13/python-deepcopy/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          python deepcopy
-        
-      </div>
-    </a>
   
   
-    <a href="/2017/06/27/pacman_usage/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">pacman的使用</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-
-
-
-
-  
-    <div class="duoshuo"></div>
+    </div></section>
   
 
-
+    
 
 
           </div>
@@ -276,8 +239,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,

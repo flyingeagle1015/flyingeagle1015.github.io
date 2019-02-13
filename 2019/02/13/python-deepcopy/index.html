@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>ssh远程服务器文件修改 | 水镜先生的博客</title>
+  <title>python deepcopy | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮难道还在服务器上配置一番???在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？常用的有这几个：    如果服务器有配置Samba, 采用磁盘映射的方式   如果文件少，直接用vim远程编辑,">
-<meta name="keywords" content="ssh">
+  <meta name="description" content="先说结论 对于简单的object用shallow copy和deep copy没有区别: 1234567891011121314151617&amp;gt;&amp;gt;&amp;gt; import copy&amp;gt;&amp;gt;&amp;gt; a = [1, 2, 3, 4]&amp;gt;&amp;gt;&amp;gt; b = copy.copy(a)&amp;gt;&amp;gt;&amp;gt; c = copy.deepcopy(a)&amp;gt;&amp;gt;&amp;gt; id">
+<meta name="keywords" content="python">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ssh远程服务器文件修改">
-<meta property="og:url" content="https://flyingeagle1015.github.io/2017/08/12/ssh_remotefile/index.html">
+<meta property="og:title" content="python deepcopy">
+<meta property="og:url" content="https://flyingeagle1015.github.io/2019/02/13/python-deepcopy/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
-<meta property="og:description" content="在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮难道还在服务器上配置一番???在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？常用的有这几个：    如果服务器有配置Samba, 采用磁盘映射的方式   如果文件少，直接用vim远程编辑,">
+<meta property="og:description" content="先说结论 对于简单的object用shallow copy和deep copy没有区别: 1234567891011121314151617&amp;gt;&amp;gt;&amp;gt; import copy&amp;gt;&amp;gt;&amp;gt; a = [1, 2, 3, 4]&amp;gt;&amp;gt;&amp;gt; b = copy.copy(a)&amp;gt;&amp;gt;&amp;gt; c = copy.deepcopy(a)&amp;gt;&amp;gt;&amp;gt; id">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-02-13T05:35:53.248Z">
+<meta property="og:updated_time" content="2019-02-13T06:59:22.885Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ssh远程服务器文件修改">
-<meta name="twitter:description" content="在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮难道还在服务器上配置一番???在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？常用的有这几个：    如果服务器有配置Samba, 采用磁盘映射的方式   如果文件少，直接用vim远程编辑,">
+<meta name="twitter:title" content="python deepcopy">
+<meta name="twitter:description" content="先说结论 对于简单的object用shallow copy和deep copy没有区别: 1234567891011121314151617&amp;gt;&amp;gt;&amp;gt; import copy&amp;gt;&amp;gt;&amp;gt; a = [1, 2, 3, 4]&amp;gt;&amp;gt;&amp;gt; b = copy.copy(a)&amp;gt;&amp;gt;&amp;gt; c = copy.deepcopy(a)&amp;gt;&amp;gt;&amp;gt; id">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -157,33 +157,34 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-ssh_remotefile" class="article article-type-post " itemscope="" itemprop="blogPost">
+            <article id="post-python-deepcopy" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      ssh远程服务器文件修改
+      python deepcopy
     </h1>
   
 
         
-        <a href="/2017/08/12/ssh_remotefile/" class="archive-article-date">
-  	<time datetime="2017-08-12T14:11:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-12</time>
+        <a href="/2019/02/13/python-deepcopy/" class="archive-article-date">
+  	<time datetime="2019-02-13T06:57:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>在工作中时常需要修改远程服务器上的文件，直接用ssh登录远程服务器进行修改是最简单直接的,<br>但比如要临时修改服务器上的代码（不提倡这么做，这里只是举例）做调试之类的，需要语法高亮<br>难道还在服务器上配置一番???<br>在本地配置好的环境进行修改当然是最方便的了，那如何在本地修改远程服务器上的代码呢？<br>常用的有这几个：  </p>
-<ol>
-<li>如果服务器有配置Samba, 采用磁盘映射的方式  </li>
-<li>如果文件少，直接用vim远程编辑, 命令：vim scp://hostname//path/to/file  </li>
-<li>本地安装sshfs, 用sshfs映射到本地进行编辑<br>挂载:<br>  sshfs username@serverip:serverpath localpath // 如果配置ssh key可以实现自动化挂载<br>卸载:<br>  fusermount -u mountpath  </li>
-<li>本地修改，采用rsync同步到远程服务器  </li>
-</ol>
+        <h3 id="先说结论"><a href="#先说结论" class="headerlink" title="先说结论"></a>先说结论</h3><ul>
+<li><p>对于简单的object用shallow copy和deep copy没有区别:</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;</span>&gt; import copy</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; b = copy.copy(a)</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; c = copy.deepcopy(a)</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; id(a)</span><br><span class="line"><span class="number">139626388915464</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; id(b)</span><br><span class="line"><span class="number">139626389057352</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; id(c)</span><br><span class="line"><span class="number">139626389086280</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; a[<span class="number">1</span>] = <span class="number">11</span></span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; a</span><br><span class="line">[<span class="number">1</span>, <span class="number">11</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; b</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line"><span class="meta">&gt;&gt;</span>&gt; c</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>]</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>对于复杂的object如list中套着list的情况, shallow copy时子list并未从原object真的独立出来</p>
+<figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&gt;&gt;&gt; import copy</span><br><span class="line">&gt;&gt;&gt; a = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt; id(a[<span class="number">4</span>])</span><br><span class="line"><span class="number">139626388917384</span></span><br><span class="line">&gt;&gt;&gt; id(a)</span><br><span class="line"><span class="number">139626389086408</span></span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; b = copy.copy(a)</span><br><span class="line">&gt;&gt;&gt; c = copy.deepcopy(a)</span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; id(b)</span><br><span class="line"><span class="number">139626388915464</span></span><br><span class="line">&gt;&gt;&gt; id(b[<span class="number">4</span>])</span><br><span class="line"><span class="number">139626388917384</span>   # b[<span class="number">4</span>]和a[<span class="number">4</span>]引用同一个对象</span><br><span class="line">&gt;&gt;&gt; id(c)</span><br><span class="line"><span class="number">139626389057352</span></span><br><span class="line">&gt;&gt;&gt; id(c[<span class="number">4</span>])</span><br><span class="line"><span class="number">139626389086472</span></span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; </span><br><span class="line">&gt;&gt;&gt; a[<span class="number">4</span>][<span class="number">0</span>]=<span class="number">111</span></span><br><span class="line">&gt;&gt;&gt; a</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">111</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt; b</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">111</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt; c</span><br><span class="line">[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, [<span class="number">11</span>, <span class="number">22</span>, <span class="number">33</span>]]</span><br><span class="line">&gt;&gt;&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
 
       
 
@@ -197,7 +198,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
         		</li>
       		
 		</ul>
@@ -209,7 +210,7 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
+        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
         		</li>
       		
 		</ul>
@@ -227,18 +228,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/02/13/python-deepcopy/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          python deepcopy
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/06/27/pacman_usage/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">pacman的使用</div>
+    <a href="/2017/08/12/ssh_remotefile/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">ssh远程服务器文件修改</div>
       <i class="icon-circle-right"></i>
     </a>
   
