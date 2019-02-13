@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>Archives: 2019 | 水镜先生的博客</title>
+  <title>ssh broken pipe | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="水镜先生的博客">
-<meta property="og:url" content="https://flyingeagle1015.github.io/archives/2019/index.html">
+  <meta name="description" content="ProblemI use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.Every time I try to connect, SSH f">
+<meta name="keywords" content="ssh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ssh broken pipe">
+<meta property="og:url" content="https://flyingeagle1015.github.io/2019/02/13/ssh-brokenpipe/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
+<meta property="og:description" content="ProblemI use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.Every time I try to connect, SSH f">
 <meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2019-02-13T07:45:28.935Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="水镜先生的博客">
+<meta name="twitter:title" content="ssh broken pipe">
+<meta name="twitter:description" content="ProblemI use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.Every time I try to connect, SSH f">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -152,36 +157,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-ssh-brokenpipe" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/02/13/ssh-brokenpipe/" class="archive-article-date">
-  	<time datetime="2019-02-13T07:38:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/13/ssh-brokenpipe/">ssh broken pipe</a>
+    <h1 class="article-title" itemprop="name">
+      ssh broken pipe
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/02/13/ssh-brokenpipe/" class="archive-article-date">
+  	<time datetime="2019-02-13T07:38:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h3><p>I use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.<br>Every time I try to connect, SSH fails with<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">packet_write_wait:<span class="built_in"> Connection </span><span class="keyword">to</span> xxx<span class="built_in"> port </span>22: Broken pipe</span><br></pre></td></tr></table></figure></p>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>added “IPQoS throughput” to my ssh_config and now I can connect to all hosts again!<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"IPQoS throughput"</span> | sudo tee -a <span class="meta-keyword">/etc/</span>ssh/ssh_config <span class="comment">// -a 是追加的意思，等同于 &gt;&gt;</span></span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -193,7 +198,7 @@
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -206,66 +211,35 @@
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/02/13/python-deepcopy/" class="archive-article-date">
-  	<time datetime="2019-02-13T06:57:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/13/python-deepcopy/">python deepcopy</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/13/python-deepcopy/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">python deepcopy</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
+
   
-  
-    </div></section>
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -288,8 +262,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,

@@ -154,6 +154,80 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-ssh-brokenpipe" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/13/ssh-brokenpipe/">ssh broken pipe</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/13/ssh-brokenpipe/" class="archive-article-date">
+  	<time datetime="2019-02-13T07:38:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h3><p>I use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.<br>Every time I try to connect, SSH fails with<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">packet_write_wait:<span class="built_in"> Connection </span><span class="keyword">to</span> xxx<span class="built_in"> port </span>22: Broken pipe</span><br></pre></td></tr></table></figure></p>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>added “IPQoS throughput” to my ssh_config and now I can connect to all hosts again!<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"IPQoS throughput"</span> | sudo tee -a <span class="meta-keyword">/etc/</span>ssh/ssh_config <span class="comment">// -a 是追加的意思，等同于 &gt;&gt;</span></span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/13/ssh-brokenpipe/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-python-deepcopy" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
