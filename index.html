@@ -154,6 +154,86 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-mysql_cli_memory_leak" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/02/26/mysql_cli_memory_leak/">mysql客户端内存泄漏</a>
+    </h1>
+  
+
+        
+        <a href="/2019/02/26/mysql_cli_memory_leak/" class="archive-article-date">
+  	<time datetime="2019-02-26T06:58:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-26</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近在用Valgrind检查一个库代码, 发现MYSQL的泄漏. 简化MySQL操作代码并测试得到了同样的泄漏.<br>码：<br><figure class="highlight autoit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mysql/mysql.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">int</span> main()</span><br><span class="line">&#123;</span><br><span class="line">    MYSQL *MYSQLIns<span class="comment">;</span></span><br><span class="line">    MYSQLIns = mysql_init(<span class="literal">NULL</span>)<span class="comment">;</span></span><br><span class="line">    mysql_real_connect(MYSQLIns, <span class="string">"localhost"</span>, <span class="string">"test"</span>, <span class="string">"123456"</span>, <span class="string">"test"</span>, <span class="number">0</span>, <span class="literal">NULL</span>, <span class="number">0</span>)<span class="comment">;</span></span><br><span class="line">    mysql_close(MYSQLIns)<span class="comment">;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS<span class="comment">;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>编译：</p>
+<p>gcc -g -L/usr/lib64/mysql -lmysqlclient mysql_mem_test.c -o mysql_mem_test<br>Valgrind输出：<br><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">valgrind <span class="comment">--leak-check=full ./mysql_mem_test</span></span><br><span class="line">==26126== Memcheck, a memory error detector</span><br><span class="line">==26126== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</span><br><span class="line">==26126== Using Valgrind-3.14.0 and LibVEX; rerun <span class="keyword">with</span> -h <span class="keyword">for</span> copyright info</span><br><span class="line">==<span class="number">26126</span>== Command: ./mysql_mem_test</span><br><span class="line">==<span class="number">26126</span>== </span><br><span class="line">==<span class="number">26126</span>== </span><br><span class="line">==<span class="number">26126</span>== <span class="keyword">HEAP</span> SUMMARY:</span><br><span class="line">==<span class="number">26126</span>==     <span class="keyword">in</span> <span class="keyword">use</span> <span class="keyword">at</span> <span class="keyword">exit</span>: <span class="number">8</span>,<span class="number">408</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">4</span> blocks</span><br><span class="line">==<span class="number">26126</span>==   total <span class="keyword">heap</span> <span class="keyword">usage</span>: <span class="number">77</span> allocs, <span class="number">73</span> frees, <span class="number">68</span>,<span class="number">596</span> <span class="keyword">bytes</span> allocated</span><br><span class="line">==<span class="number">26126</span>== </span><br><span class="line">==<span class="number">26126</span>== <span class="number">56</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">1</span> blocks <span class="keyword">are</span> possibly lost <span class="keyword">in</span> loss <span class="built_in">record</span> <span class="number">1</span> <span class="keyword">of</span> <span class="number">4</span></span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">at</span> <span class="number">0x4C29E83</span>: malloc (vg_replace_malloc.c:<span class="number">299</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E999E7</span>: my_raw_malloc (my_malloc.c:<span class="number">191</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E999E7</span>: my_malloc (my_malloc.c:<span class="number">54</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E98A1C</span>: my_error_register (my_error.c:<span class="number">310</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E5CC24</span>: mysql_server_init (libmysql.c:<span class="number">116</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E655B6</span>: mysql_init (client.c:<span class="number">2460</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4006CE</span>: <span class="keyword">main</span> (a.c:<span class="number">9</span>)</span><br><span class="line">==<span class="number">26126</span>== </span><br><span class="line">==<span class="number">26126</span>== <span class="number">176</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">1</span> blocks <span class="keyword">are</span> possibly lost <span class="keyword">in</span> loss <span class="built_in">record</span> <span class="number">2</span> <span class="keyword">of</span> <span class="number">4</span></span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">at</span> <span class="number">0x4C29E83</span>: malloc (vg_replace_malloc.c:<span class="number">299</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E999E7</span>: my_raw_malloc (my_malloc.c:<span class="number">191</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E999E7</span>: my_malloc (my_malloc.c:<span class="number">54</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E97B8A</span>: init_alloc_root (my_alloc.c:<span class="number">77</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E6F01B</span>: mysql_client_plugin_init (client_plugin.c:<span class="number">342</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E5CC2B</span>: mysql_server_init (libmysql.c:<span class="number">117</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4E655B6</span>: mysql_init (client.c:<span class="number">2460</span>)</span><br><span class="line">==<span class="number">26126</span>==    <span class="keyword">by</span> <span class="number">0x4006CE</span>: <span class="keyword">main</span> (a.c:<span class="number">9</span>)</span><br><span class="line">==<span class="number">26126</span>== </span><br><span class="line">==<span class="number">26126</span>== LEAK SUMMARY:</span><br><span class="line">==<span class="number">26126</span>==    definitely lost: <span class="number">0</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">0</span> blocks</span><br><span class="line">==<span class="number">26126</span>==    indirectly lost: <span class="number">0</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">0</span> blocks</span><br><span class="line">==<span class="number">26126</span>==      possibly lost: <span class="number">232</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">2</span> blocks</span><br><span class="line">==<span class="number">26126</span>==    still reachable: <span class="number">8</span>,<span class="number">176</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">2</span> blocks</span><br><span class="line">==<span class="number">26126</span>==         suppressed: <span class="number">0</span> <span class="keyword">bytes</span> <span class="keyword">in</span> <span class="number">0</span> blocks</span><br><span class="line">==<span class="number">26126</span>== Reachable blocks (those <span class="keyword">to</span> which a pointer was <span class="keyword">found</span>) <span class="keyword">are</span> <span class="keyword">not</span> shown.</span><br><span class="line">==<span class="number">26126</span>== <span class="keyword">To</span> see them, rerun <span class="keyword">with</span>: <span class="comment">--leak-check=full --show-leak-kinds=all</span></span><br><span class="line">==<span class="number">26126</span>== </span><br><span class="line">==<span class="number">26126</span>== <span class="keyword">For</span> counts <span class="keyword">of</span> detected <span class="keyword">and</span> suppressed <span class="keyword">errors</span>, rerun <span class="keyword">with</span>: -v</span><br><span class="line">==<span class="number">26126</span>== <span class="keyword">ERROR</span> SUMMARY: <span class="number">2</span> <span class="keyword">errors</span> <span class="keyword">from</span> <span class="number">2</span> contexts (suppressed: <span class="number">0</span> <span class="keyword">from</span> <span class="number">0</span>)</span><br></pre></td></tr></table></figure></p>
+<p>查阅MySQL C API了解到:<br>在非多线程环境中， mysql_init()根据需要自动调用mysql_library_init()。但是mysql_library_init()不是线程安全的，<br>因此在多线程环境应该在mysql_init()且产生任何线程之前调用mysql_library_init()，或者使用互斥锁来保护mysql_library_init()。<br>这应该在任何其他客户端库调用之前完成。<br>mysql_close()仅释放mysql_init()或mysql_connect()创建的连接，而不会释放mysql_library_init()分配的内存，需要调用mysql_library_end()执行一些内存清理. </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/02/26/mysql_cli_memory_leak/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-ssh-brokenpipe" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -744,6 +824,14 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">markdown</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
               <li class="article-tag-list-item">
