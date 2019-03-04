@@ -6,15 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>Archives | 水镜先生的博客</title>
+  <title>C代码不在一行多次修改一个变量 | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="水镜先生的博客">
-<meta property="og:url" content="https://flyingeagle1015.github.io/archives/index.html">
+  <meta name="description" content="不要在同一行代码对同一变量做多次修改源于对大神项目代码学习中遇到得问题，经简化复现方便说明。示例：1234567891011121314151617181920212223242526272829#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;string.h&amp;gt;typedef struct &amp;#123;  char">
+<meta name="keywords" content="c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C代码不在一行多次修改一个变量">
+<meta property="og:url" content="https://flyingeagle1015.github.io/2019/03/04/c-error-mutliple-modify-one-variable/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
+<meta property="og:description" content="不要在同一行代码对同一变量做多次修改源于对大神项目代码学习中遇到得问题，经简化复现方便说明。示例：1234567891011121314151617181920212223242526272829#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;string.h&amp;gt;typedef struct &amp;#123;  char">
 <meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2019-03-04T10:30:20.444Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="水镜先生的博客">
+<meta name="twitter:title" content="C代码不在一行多次修改一个变量">
+<meta name="twitter:description" content="不要在同一行代码对同一变量做多次修改源于对大神项目代码学习中遇到得问题，经简化复现方便说明。示例：1234567891011121314151617181920212223242526272829#include &amp;lt;stdio.h&amp;gt;#include &amp;lt;stdlib.h&amp;gt;#include &amp;lt;string.h&amp;gt;typedef struct &amp;#123;  char">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -152,36 +157,38 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
+            <article id="post-c-error-mutliple-modify-one-variable" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
+    <h1 class="article-title" itemprop="name">
+      C代码不在一行多次修改一个变量
+    </h1>
   
-    
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/04/c-error-mutliple-modify-one-variable/" class="archive-article-date">
+
+        
+        <a href="/2019/03/04/c-error-mutliple-modify-one-variable/" class="archive-article-date">
   	<time datetime="2019-03-04T09:52:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-04</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/04/c-error-mutliple-modify-one-variable/">C代码不在一行多次修改一个变量</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="不要在同一行代码对同一变量做多次修改"><a href="#不要在同一行代码对同一变量做多次修改" class="headerlink" title="不要在同一行代码对同一变量做多次修改"></a>不要在同一行代码对同一变量做多次修改</h2><p>源于对大神项目代码学习中遇到得问题，经简化复现方便说明。<br>示例：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">  <span class="keyword">char</span> *buf;</span><br><span class="line">  <span class="keyword">int</span> top;</span><br><span class="line">&#125;<span class="keyword">context_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">faaa</span><span class="params">(<span class="keyword">context_t</span> *c , <span class="keyword">int</span> o)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  c-&gt;top += o;</span><br><span class="line">  <span class="keyword">return</span> <span class="number">6</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">context_t</span> c;</span><br><span class="line">    <span class="built_in">memset</span>(&amp;c, <span class="number">0</span>, <span class="keyword">sizeof</span>(c));</span><br><span class="line"></span><br><span class="line">    c.top -= <span class="number">32</span> - faaa(&amp;c, <span class="number">32</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"top:%d, should be 6\n"</span>, c.top);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[test@test tmp]$ gcc -g -o test a.c</span><br><span class="line">[test@test tmp]$ ./test </span><br><span class="line">top:<span class="number">-26</span>, should be <span class="number">6</span></span><br></pre></td></tr></table></figure></p>
+<p>代码行中<code>c.top -= 32 - faaa(&amp;c, 32);</code>对c.top做了两次修改：<br>第一次为faaa中的修改<br>第二次为自减操作</p>
+<p>为什么会这样呢？马上为您揭晓！<br><figure class="highlight x86asm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">(gdb) disassemble main</span><br><span class="line">Dump of assembler code for function main:</span><br><span class="line">   <span class="number">0x00000000004005a2</span> &lt;+<span class="number">0</span>&gt;:	<span class="keyword">push</span>   %rbp</span><br><span class="line">   <span class="number">0x00000000004005a3</span> &lt;+<span class="number">1</span>&gt;:	<span class="keyword">mov</span>    %rsp,%rbp</span><br><span class="line">   <span class="number">0x00000000004005a6</span> &lt;+<span class="number">4</span>&gt;:	<span class="keyword">push</span>   %rbx</span><br><span class="line">   <span class="number">0x00000000004005a7</span> &lt;+<span class="number">5</span>&gt;:	<span class="keyword">sub</span>    <span class="number">$0</span>x18,%rsp</span><br><span class="line">   <span class="number">0x00000000004005ab</span> &lt;+<span class="number">9</span>&gt;:	<span class="keyword">lea</span>    -<span class="number">0x20</span>(%rbp),%rax</span><br><span class="line">   <span class="number">0x00000000004005af</span> &lt;+<span class="number">13</span>&gt;:	<span class="keyword">mov</span>    <span class="number">$0</span>x10,%edx</span><br><span class="line">   <span class="number">0x00000000004005b4</span> &lt;+<span class="number">18</span>&gt;:	<span class="keyword">mov</span>    <span class="number">$0</span>x0,%esi</span><br><span class="line">   <span class="number">0x00000000004005b9</span> &lt;+<span class="number">23</span>&gt;:	<span class="keyword">mov</span>    %rax,%rdi</span><br><span class="line">   <span class="number">0x00000000004005bc</span> &lt;+<span class="number">26</span>&gt;:	callq  <span class="number">0x400460</span> &lt;memset@plt&gt; // 对应memset(&amp;c, <span class="number">0</span>, sizeof(c))<span class="comment">;</span></span><br><span class="line">   <span class="number">0x00000000004005c1</span> &lt;+<span class="number">31</span>&gt;:	<span class="keyword">mov</span>    -<span class="number">0x18</span>(%rbp),%ebx      // 将c-&gt;top放到寄存器<span class="built_in">ebx</span></span><br><span class="line">   <span class="number">0x00000000004005c4</span> &lt;+<span class="number">34</span>&gt;:	<span class="keyword">lea</span>    -<span class="number">0x20</span>(%rbp),%rax      // 将c地址放到寄存器<span class="built_in">rax</span></span><br><span class="line">   <span class="number">0x00000000004005c8</span> &lt;+<span class="number">38</span>&gt;:	<span class="keyword">mov</span>    <span class="number">$0</span>x20,%esi            // 将<span class="number">20</span>放到寄存器<span class="built_in">esi</span>, 作为faaa的第二个参数</span><br><span class="line">   <span class="number">0x00000000004005cd</span> &lt;+<span class="number">43</span>&gt;:	<span class="keyword">mov</span>    %rax,%rdi             // <span class="built_in">rdi</span>作为faaa的第一个参数</span><br><span class="line">   <span class="number">0x00000000004005d0</span> &lt;+<span class="number">46</span>&gt;:	callq  <span class="number">0x40057d</span> &lt;faaa&gt;       // 调用函数faaa</span><br><span class="line">   <span class="number">0x00000000004005d5</span> &lt;+<span class="number">51</span>&gt;:	<span class="keyword">sub</span>    <span class="number">$0</span>x20,%eax            // faaa返回值(返回值放<span class="built_in">eax</span>寄存器) - <span class="number">32</span>, 这里编译器做了调整a - (b - c) =&gt;  a + (c - b)</span><br><span class="line">   <span class="number">0x00000000004005d8</span> &lt;+<span class="number">54</span>&gt;:	<span class="keyword">add</span>    %ebx,%eax             // 加上“缓存”中的c-&gt;top</span><br><span class="line">   <span class="number">0x00000000004005da</span> &lt;+<span class="number">56</span>&gt;:	<span class="keyword">mov</span>    %eax,-<span class="number">0x18</span>(%rbp)</span><br><span class="line">   <span class="number">0x00000000004005dd</span> &lt;+<span class="number">59</span>&gt;:	<span class="keyword">mov</span>    -<span class="number">0x18</span>(%rbp),%eax</span><br><span class="line">   <span class="number">0x00000000004005e0</span> &lt;+<span class="number">62</span>&gt;:	<span class="keyword">mov</span>    %eax,%esi</span><br><span class="line">   <span class="number">0x00000000004005e2</span> &lt;+<span class="number">64</span>&gt;:	<span class="keyword">mov</span>    <span class="number">$0</span>x400690,%edi</span><br><span class="line">   <span class="number">0x00000000004005e7</span> &lt;+<span class="number">69</span>&gt;:	<span class="keyword">mov</span>    <span class="number">$0</span>x0,%eax</span><br><span class="line">   <span class="number">0x00000000004005ec</span> &lt;+<span class="number">74</span>&gt;:	callq  <span class="number">0x400450</span> &lt;printf@plt&gt;</span><br><span class="line">   <span class="number">0x00000000004005f1</span> &lt;+<span class="number">79</span>&gt;:	<span class="keyword">mov</span>    <span class="number">$0</span>x0,%eax</span><br><span class="line">   <span class="number">0x00000000004005f6</span> &lt;+<span class="number">84</span>&gt;:	<span class="keyword">add</span>    <span class="number">$0</span>x18,%rsp</span><br><span class="line">   <span class="number">0x00000000004005fa</span> &lt;+<span class="number">88</span>&gt;:	<span class="keyword">pop</span>    %rbx</span><br><span class="line">   <span class="number">0x00000000004005fb</span> &lt;+<span class="number">89</span>&gt;:	<span class="keyword">pop</span>    %rbp</span><br><span class="line">   <span class="number">0x00000000004005fc</span> &lt;+<span class="number">90</span>&gt;:	retq   </span><br><span class="line">End of assembler dump.</span><br></pre></td></tr></table></figure></p>
+<p>重点来了, 加上的是<code>缓存</code>的c-&gt;top。<br>解决方案：<br>  将行<code>c.top -= 32 - faaa(&amp;c, 32);</code>拆为两行:<br><figure class="highlight excel"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">int</span> <span class="built_in">n</span> = faaa(&amp;c, <span class="number">32</span>);</span><br><span class="line">c.top -= (<span class="number">32</span> - <span class="built_in">n</span>);</span><br></pre></td></tr></table></figure></p>
 
-        <div class="article-info info-on-right">
-          
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
@@ -193,319 +200,7 @@
 		</ul>
 	</div>
 
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/02/26/mysql_cli_memory_leak/" class="archive-article-date">
-  	<time datetime="2019-02-26T06:58:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-26</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/26/mysql_cli_memory_leak/">mysql客户端内存泄漏</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/02/13/ssh-brokenpipe/" class="archive-article-date">
-  	<time datetime="2019-02-13T07:38:44.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/13/ssh-brokenpipe/">ssh broken pipe</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/02/13/python-deepcopy/" class="archive-article-date">
-  	<time datetime="2019-02-13T06:57:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-02-13</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/02/13/python-deepcopy/">python deepcopy</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">python</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
       
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/12/ssh_remotefile/" class="archive-article-date">
-  	<time datetime="2017-08-12T14:11:25.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-12</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/12/ssh_remotefile/">ssh远程服务器文件修改</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">ssh</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/27/pacman_usage/" class="archive-article-date">
-  	<time datetime="2017-06-27T06:00:45.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-27</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/27/pacman_usage/">pacman的使用</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">blog</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/06/23/thinkphp3-2-3-dynamically-include-templatefile/" class="archive-article-date">
-  	<time datetime="2017-06-23T03:36:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-23</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/06/23/thinkphp3-2-3-dynamically-include-templatefile/">ThinkPHP3.2.3动态包含文件解决方案</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">php</a>
-        		</li>
-      		 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">thinkphp</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -518,66 +213,35 @@
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/30/markdown-syntax/" class="archive-article-date">
-  	<time datetime="2017-03-30T06:19:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/30/markdown-syntax/">markdown语法</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">markdown</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/language/" class="article-tag-list-link color4">language</a>
-        		</li>
-      		
-		</ul>
-	</div>
+  
+<nav id="article-nav">
+  
+  
+    <a href="/2019/02/26/mysql_cli_memory_leak/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">mysql客户端内存泄漏</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
+
   
-  
-    </div></section>
+    <div class="duoshuo"></div>
   
 
-    
+
 
 
           </div>
@@ -600,8 +264,8 @@
 	var yiliaConfig = {
 		mathjax: true,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: true,
