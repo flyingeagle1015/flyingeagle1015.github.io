@@ -154,6 +154,83 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-git_commit_standard" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/19/git_commit_standard/">Git提交规范</a>
+    </h1>
+  
+
+        
+        <a href="/2019/03/19/git_commit_standard/" class="archive-article-date">
+  	<time datetime="2019-03-19T01:14:49.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="规则"><a href="#规则" class="headerlink" title="规则"></a>规则</h2><p><code>&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;</code></p>
+<h3 id="type"><a href="#type" class="headerlink" title="type"></a>type</h3><p>用于说明 commit 的类别，只允许使用下面7个标识。</p>
+<p>feat：新功能（feature）<br>fix：修补bug<br>docs：文档（documentation）<br>style： 格式（不影响代码运行的变动）<br>refactor：重构（即不是新增功能，也不是修改bug的代码变动）<br>test：增加测试<br>chore：构建过程或辅助工具的变动  </p>
+<h3 id="scope"><a href="#scope" class="headerlink" title="scope"></a>scope</h3><p>用于说明 commit 影响的范围，比如数据层、控制层、视图层等等，视项目不同而不同。 </p>
+<h3 id="subject"><a href="#subject" class="headerlink" title="subject"></a>subject</h3><p>是 commit 目的的简短描述，不超过50个字符。<br>以动词开头，使用第一人称现在时，比如change，而不是changed或changes<br>第一个字母小写<br>结尾不加句号(.)  </p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">git</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/application/" class="article-tag-list-link color2">application</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2019/03/19/git_commit_standard/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-c-error-mutliple-modify-one-variable" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -267,11 +344,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
         		</li>
       		
 		</ul>
@@ -707,88 +784,10 @@ pacman -Scc 清理所有的缓存文件。
 
 
   
-    <article id="post-markdown-syntax" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/03/30/markdown-syntax/">markdown语法</a>
-    </h1>
-  
-
-        
-        <a href="/2017/03/30/markdown-syntax/" class="archive-article-date">
-  	<time datetime="2017-03-30T06:19:15.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h1 id="Markdown-Syntax-Reference"><a href="#Markdown-Syntax-Reference" class="headerlink" title="Markdown Syntax Reference"></a>Markdown Syntax Reference</h1><p>From <a href="http://daringfireball.net/projects/markdown/" target="_blank" rel="noopener">http://daringfireball.net/projects/markdown/</a></p>
-<blockquote>
-<p>Markdown is a text-to-HTML conversion tool for web writers. Markdown allows<br>you to write using an easy-to-read, easy-to-write plain text format, then<br>convert it to structurally valid XHTML (or HTML).</p>
-</blockquote>
-<p>Dataset summaries and discussions on data.world use the Markdown format. This<br>means that users can create beautiful documentation with simple markup that’s<br>easy to write and read.</p>
-<p>This document will show you how to take advantage of Markdown to format your<br>summary and discussion posts.</p>
-<h2 id="Phrase-Emphasis"><a href="#Phrase-Emphasis" class="headerlink" title="Phrase Emphasis"></a>Phrase Emphasis</h2><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="emphasis">*italic*</span>   <span class="strong">**bold**</span></span><br><span class="line"><span class="emphasis">_italic_</span>   <span class="strong">__bold__</span></span><br></pre></td></tr></table></figure>
-<p><em>italic</em>   <strong>bold</strong></p>
-        
-          <a class="article-more-a" href="/2017/03/30/markdown-syntax/#more">more >></a>
-        
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">markdown</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/language/" class="article-tag-list-link color4">language</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2017/03/30/markdown-syntax/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-
-
-
-
-
-
-
-  
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+    </nav>
   
 
 
@@ -899,7 +898,19 @@ MathJax.Hub.Queue(function() {
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">C</a>
+                <a href="javascript:void(0)" class="js-tag color2">c</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">markdown</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -920,18 +931,6 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">thinkphp</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">markdown</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
             
             <div class="clearfix"></div>
