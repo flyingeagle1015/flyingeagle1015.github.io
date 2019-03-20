@@ -154,6 +154,87 @@
           <div id="js-content" class="content-ll">
             
   
+    <article id="post-thinkphp3-2-3-dynamically-include-templatefile" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/06/23/thinkphp3-2-3-dynamically-include-templatefile/">ThinkPHP3.2.3动态包含文件解决方案</a>
+    </h1>
+  
+
+        
+        <a href="/2017/06/23/thinkphp3-2-3-dynamically-include-templatefile/" class="archive-article-date">
+  	<time datetime="2017-06-23T03:36:46.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-06-23</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>老手莫喷哦，我是PHP小菜！<br>使用场景：用户选择需要的页面，动态生成选项卡TAB页。<br>预想代码实现如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 其他模板代码 --&gt;</span><br><span class="line">&lt;div class="tabbable"&gt;</span><br><span class="line">  &lt;!-- nav-tabs 相关代码 --&gt;</span><br><span class="line">  &lt;div class="tab-content"&gt;</span><br><span class="line">    &lt;<span class="keyword">foreach</span> name=<span class="string">"tabfiles"</span> item=<span class="string">"ff"</span>&gt;</span><br><span class="line">      &lt;<span class="keyword">include</span> file=<span class="string">"$ff"</span> /&gt;  &lt;!--  ThinkPHP不支持，这里无法加载文件 --&gt;</span><br><span class="line">    &lt;/<span class="keyword">foreach</span>&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>然而ThinkPHP3.2.3的include标签不支持动态解析。首先想到的是纯php实现文件内容读取，实现代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 其他模板代码 --&gt;</span><br><span class="line">&lt;div class="tabbable"&gt;</span><br><span class="line">  &lt;!-- nav-tabs 相关代码 --&gt;</span><br><span class="line">  &lt;div class="tab-content"&gt;</span><br><span class="line">    &lt;<span class="keyword">foreach</span> name=<span class="string">"tabfiles_content"</span> item=<span class="string">"ff"</span>&gt;  &lt;!-- tabfiles_content是文件内容的数组 --&gt;</span><br><span class="line">      $ff          &lt;!-- 直接输出文件内容 --&gt;</span><br><span class="line">    &lt;/<span class="keyword">foreach</span>&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>另一种方法类似，只是把文件读取放在模板中，代码如下：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 其他模板代码 --&gt;</span><br><span class="line">&lt;div class="tabbable"&gt;</span><br><span class="line">  &lt;!-- nav-tabs 相关代码 --&gt;</span><br><span class="line">  &lt;div class="tab-content"&gt;</span><br><span class="line">    &lt;<span class="keyword">foreach</span> name=<span class="string">"tabfiles"</span> item=<span class="string">"ff"</span>&gt;</span><br><span class="line">      <span class="meta">&lt;?php</span> <span class="keyword">include_once</span>($ff); <span class="meta">?&gt;</span> &lt;!-- PHP 读取文件内容 --&gt;</span><br><span class="line">    &lt;/<span class="keyword">foreach</span>&gt;</span><br><span class="line">  &lt;/div&gt;</span><br><span class="line">&lt;/div&gt;</span><br></pre></td></tr></table></figure></p>
+<p>忍不住激动的心情，在浏览器里刷一下，页面真的出来了耶，然而细看一下发现PHP相关变量没有解析，显示也有问题~~~<br>经过查阅ThinkPHP的模板解析代码ThinkPHP/Library/Think/Template.class.php代码，终于感到了上天发现了它的秘密，<br>果断修改显示模板的实现：<br><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//$this-&gt;display('mytabpage');修改为</span></span><br><span class="line"><span class="keyword">$this</span>-&gt;show(<span class="keyword">$this</span>-&gt;fetch(<span class="string">'mytabpage'</span>));</span><br></pre></td></tr></table></figure></p>
+<p>哇哦，漂亮的页面终于出来了！！！</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">php</a>
+        		</li>
+      		 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color4">thinkphp</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+	<div class="article-category tagcloud">
+		<i class="icon-book icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="/categories/develop/" class="article-tag-list-link color3">develop</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2017/06/23/thinkphp3-2-3-dynamically-include-templatefile/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+
+
+
+  
     <article id="post-markdown-syntax" class="article article-type-post  article-index" itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
@@ -354,15 +435,7 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">git</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">markdown</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -370,11 +443,15 @@ MathJax.Hub.Queue(function() {
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">markdown</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -383,6 +460,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color4">thinkphp</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color4">git</a>
               </li>
             
             <div class="clearfix"></div>
