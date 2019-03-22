@@ -19,6 +19,8 @@ easy to write and read.
 This document will show you how to take advantage of Markdown to format your
 summary and discussion posts.
 
+<!-- more -->
+
 ## Phrase Emphasis
 ```
 *italic*   **bold**

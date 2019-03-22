@@ -28,6 +28,8 @@ categories: [develop]
 [1, 2, 3, 4]
 ```
 
+<!-- more -->
+
 * 对于复杂的object如list中套着list的情况, shallow copy时子list并未从原object真的独立出来
 ```
 >>> import copy

@@ -26,6 +26,8 @@ git diff readme.txt
 git diff HEAD -- readme.txt
 ```
 
+<!-- more -->
+
 # 版本回退
 ```
 git log

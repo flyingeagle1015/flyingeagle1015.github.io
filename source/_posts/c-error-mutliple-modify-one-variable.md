@@ -40,6 +40,8 @@ int main()
 top:-26, should be 6
 ```
 
+<!-- more -->
+
 代码行中`c.top -= 32 - faaa(&c, 32);`对c.top做了两次修改：
 第一次为faaa中的修改
 第二次为自减操作

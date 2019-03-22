@@ -26,6 +26,9 @@ int main()
 编译：
 
 gcc -g -L/usr/lib64/mysql -lmysqlclient mysql_mem_test.c -o mysql_mem_test
+
+<!-- more -->
+
 Valgrind输出：
 ```
 valgrind --leak-check=full ./mysql_mem_test

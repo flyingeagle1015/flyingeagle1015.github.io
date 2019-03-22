@@ -1,0 +1,87 @@
+# Header
+
+menu:
+  主页: /
+  开发: /categories/develop
+  应用: /categories/application
+
+# SubNav
+subnav:
+  github: "https://github.com/flyingeagle1015"
+  #weibo: "#"
+  #rss: /atom.xml
+  #zhihu: "#"
+  #douban: "#"
+  #segmentfault: "#"
+  mail: "mailto:xiaoqiangx1015@163.com"
+  #facebook: "#"
+  #google: "#"
+  #twitter: "#"
+  #linkedin: "#"
+
+rss: /atom.xml
+
+# 是否需要修改 root 路径
+# 如果您的网站存放在子目录中，例如 http://yoursite.com/blog，
+# 请将您的 url 设为 http://yoursite.com/blog 并把 root 设为 /blog/。
+root: 
+
+# Content
+excerpt_link: more
+show_all_link: '展开全文'
+fancybox: false
+mathjax: true
+
+# 打赏
+reward_type: 0
+reward_wording: 
+alipay: 
+weixin: 
+
+# 是否在新窗口打开链接
+open_in_new: true
+
+# Miscellaneous
+baidu_analytics: false
+google_analytics: false
+favicon: /assets/img/favicon.ico
+
+#你的头像url
+avatar: /assets/img/avatar.png
+
+#是否开启分享
+share_jia: false
+
+mobile:
+  social: true
+
+#是否开启多说评论，填写你在多说申请的项目名称 duoshuo: duoshuo-key
+#若使用disqus，请在博客config文件中填写disqus_shortname，并关闭多说评论
+duoshuo: false
+
+# 样式定制 - 一般不需要修改，除非有很强的定制欲望…
+style:
+  # 头像上面的背景颜色
+  header: '#4d4d4d'
+  # 右滑板块背景
+  slider: 'linear-gradient(200deg,#a0cfe4,#e8c37e)'
+
+# slider的设置
+slider:
+  # 是否默认展开tags板块
+  showTags: false
+
+# 如不需要，将该项置为false
+# 比如
+#smart_menu:
+#  friends: false
+
+smart_menu:
+  innerArchive: '所有文章'
+  friends: '友情链接'
+  aboutme: '关于我'
+
+friends:
+  ChinaUnix: http://blog.chinaunix.net/uid/27769897.html
+
+aboutme: <p>水镜先生<br>软件工程师, 09年趟进软件开发这片汪洋。<br>精通C/C++软件开发, 熟悉Windows桌面, 主攻Linux服务器开发、网络开发。</p>

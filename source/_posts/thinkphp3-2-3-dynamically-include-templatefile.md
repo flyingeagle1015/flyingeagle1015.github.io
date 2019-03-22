@@ -20,6 +20,8 @@ categories: [develop]
 </div>
 ```
 
+<!-- more -->
+
 然而ThinkPHP3.2.3的include标签不支持动态解析。首先想到的是纯php实现文件内容读取，实现代码如下：
 ```php
 <!-- 其他模板代码 -->

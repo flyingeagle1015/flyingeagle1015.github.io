@@ -18,6 +18,8 @@ pacman -Syu
 pacman -Su
 ```
 
+<!-- more -->
+
 2、安装包
 ```bash
 pacman -S 包名 例如，执行 pacman -S firefox 将安装 Firefox。你也可以同时安装多个包，只需以空格分隔包名即可。
