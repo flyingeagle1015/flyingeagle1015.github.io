@@ -6,15 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>Tag: list | 水镜先生的博客</title>
+  <title>beego orm多对多关系 | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="水镜先生的博客">
-<meta property="og:url" content="https://flyingeagle1015.github.io/tags/list/index.html">
+  <meta name="description" content="今天聊聊beego中orm多对多关系的实现，我也是刚刚接触beego，大神莫要拍砖哦~_系统中常用的权限管理为例，先看ER图: 每个用户对应一个角色，一个角色对应多种权限，一种权限也可分给多个角色,获取某一用户所拥有的权限。">
+<meta name="keywords" content="go,beego">
+<meta property="og:type" content="article">
+<meta property="og:title" content="beego orm多对多关系">
+<meta property="og:url" content="https://flyingeagle1015.github.io/2019/04/19/beego-orm-m2m/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
+<meta property="og:description" content="今天聊聊beego中orm多对多关系的实现，我也是刚刚接触beego，大神莫要拍砖哦~_系统中常用的权限管理为例，先看ER图: 每个用户对应一个角色，一个角色对应多种权限，一种权限也可分给多个角色,获取某一用户所拥有的权限。">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="https://flyingeagle1015.github.io/img/posts/beego_m2m_er.png">
+<meta property="og:updated_time" content="2019-04-19T09:49:32.664Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="水镜先生的博客">
+<meta name="twitter:title" content="beego orm多对多关系">
+<meta name="twitter:description" content="今天聊聊beego中orm多对多关系的实现，我也是刚刚接触beego，大神莫要拍砖哦~_系统中常用的权限管理为例，先看ER图: 每个用户对应一个角色，一个角色对应多种权限，一种权限也可分给多个角色,获取某一用户所拥有的权限。">
+<meta name="twitter:image" content="https://flyingeagle1015.github.io/img/posts/beego_m2m_er.png">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -148,52 +155,58 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-beego-orm-m2m" class="article article-type-post " itemscope="" itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2019" class="archive-year">2019</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2019/03/21/list_algorithms/" class="archive-article-date">
-  	<time datetime="2019-03-21T06:47:09.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-03-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2019/03/21/list_algorithms/">链表常见算法</a>
+    <h1 class="article-title" itemprop="name">
+      beego orm多对多关系
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
+        
+        <a href="/2019/04/19/beego-orm-m2m/" class="archive-article-date">
+  	<time datetime="2019-04-19T05:54:51.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>今天聊聊beego中orm多对多关系的实现，我也是刚刚接触beego，大神莫要拍砖哦~_<br>系统中常用的权限管理为例，先看ER图:<br><img src="/img/posts/beego_m2m_er.png" alt="beego_m2m_er"></p>
+<p>每个用户对应一个角色，一个角色对应多种权限，一种权限也可分给多个角色,<br>获取某一用户所拥有的权限。</p>
+<a id="more"></a>
+<p><strong>方法1 自动生成中间表</strong><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> RoleObject <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id     <span class="keyword">int</span>           <span class="string">`json:"id"`</span></span><br><span class="line">  Name   <span class="keyword">string</span>        <span class="string">`json:"name"`</span></span><br><span class="line">  Remark <span class="keyword">string</span>        <span class="string">`json:"remark"`</span></span><br><span class="line">  Perms  []*PermObject <span class="string">`orm:"rel(m2m);rel_table(tbl_role_permission)"`</span> <span class="comment">// rel_table指定中间表表名</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *RoleObject)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_role"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> PermObject <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id     <span class="keyword">int</span>           <span class="string">`json:"id"`</span></span><br><span class="line">  Name   <span class="keyword">string</span>        <span class="string">`json:"name"`</span></span><br><span class="line">  Remark <span class="keyword">string</span>        <span class="string">`json:"remark"`</span></span><br><span class="line">  Roles  []*RoleObject <span class="string">`orm:"reverse(many);column(role_id)"`</span> <span class="comment">// 设置一对多的反向关系</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *PermObject)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_permission"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> UserObject <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id      <span class="keyword">int</span>         <span class="string">`json:"id"`</span></span><br><span class="line">  Name    <span class="keyword">string</span>      <span class="string">`json:"name"`</span></span><br><span class="line">  Passwd  <span class="keyword">string</span>      <span class="string">`json:"passwd"`</span></span><br><span class="line">  Company <span class="keyword">string</span>      <span class="string">`json:"companyt"`</span></span><br><span class="line">  Email   <span class="keyword">string</span>      <span class="string">`json:"email"`</span></span><br><span class="line">  Phone   <span class="keyword">string</span>      <span class="string">`json:"phone"`</span></span><br><span class="line">  Role    *RoleObject <span class="string">`orm:"rel(fk)"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *UserObject)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_user"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>注意</code>由于beego orm的解析规则, 中间表tbl_role_permission中的字段名称会是<code>tbl_role_id</code>和<code>tbl_permission_id</code>。</p>
+<p><strong>方法2 指定中间表字段</strong><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> RoleObject <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id     <span class="keyword">int</span>           <span class="string">`json:"id"`</span></span><br><span class="line">  Name   <span class="keyword">string</span>        <span class="string">`json:"name"`</span></span><br><span class="line">  Remark <span class="keyword">string</span>        <span class="string">`json:"remark"`</span></span><br><span class="line">  Perms  []*PermObject <span class="string">`orm:"rel(m2m);rel_through(perf/user_demo/models.RolePermRel)"`</span> <span class="comment">// rel_through指定中间表结构</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *RoleObject)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_role"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> PermObject <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id     <span class="keyword">int</span>           <span class="string">`json:"id"`</span></span><br><span class="line">  Name   <span class="keyword">string</span>        <span class="string">`json:"name"`</span></span><br><span class="line">  Remark <span class="keyword">string</span>        <span class="string">`json:"remark"`</span></span><br><span class="line">  Roles  []*RoleObject <span class="string">`orm:"reverse(many);column(role_id)"`</span> <span class="comment">// 设置一对多的反向关系</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *PermObject)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_permission"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> RolePermRel <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id     <span class="keyword">int</span>           <span class="string">`json:"id"`</span></span><br><span class="line">  Role    *RoleObject    <span class="string">`orm:"rel(fk)"`</span></span><br><span class="line">  Permission    *PermObject    <span class="string">`orm:"rel(fk)"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *RolePermRel)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_role_permission"</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> UserObject <span class="keyword">struct</span> &#123;</span><br><span class="line">  Id      <span class="keyword">int</span>         <span class="string">`json:"id"`</span></span><br><span class="line">  Name    <span class="keyword">string</span>      <span class="string">`json:"name"`</span></span><br><span class="line">  Passwd  <span class="keyword">string</span>      <span class="string">`json:"passwd"`</span></span><br><span class="line">  Company <span class="keyword">string</span>      <span class="string">`json:"companyt"`</span></span><br><span class="line">  Email   <span class="keyword">string</span>      <span class="string">`json:"email"`</span></span><br><span class="line">  Phone   <span class="keyword">string</span>      <span class="string">`json:"phone"`</span></span><br><span class="line">  Role    *RoleObject <span class="string">`orm:"rel(fk)"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *UserObject)</span> <span class="title">TableName</span><span class="params">()</span> <span class="title">string</span></span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="string">"tbl_user"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>获取用户的信息及其权限</strong><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Get_user_perm</span><span class="params">(userid <span class="keyword">int</span>)</span> <span class="params">(total <span class="keyword">int</span>, data UserObject)</span></span> &#123;</span><br><span class="line">  o := orm.NewOrm()</span><br><span class="line">  err := o.QueryTable(<span class="string">"tbl_user"</span>).Filter(<span class="string">"id"</span>, userid).RelatedSel().One(&amp;data)</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">      fmt.Println(<span class="string">"query user failed, "</span>, err)</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">// 必须调用LoadRelated载入模型的关系字段</span></span><br><span class="line">  o.LoadRelated(data.Role, <span class="string">"perms"</span>)</span><br><span class="line">  fmt.Println(<span class="string">"User data: "</span>, data)</span><br><span class="line">  <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>查询出的结果</strong><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"data"</span>: &#123;</span><br><span class="line">    <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="attr">"name"</span>: <span class="string">"test"</span>,</span><br><span class="line">    <span class="attr">"passwd"</span>: <span class="string">"123456"</span>,</span><br><span class="line">    <span class="attr">"companyt"</span>: <span class="string">"ik"</span>,</span><br><span class="line">    <span class="attr">"email"</span>: <span class="string">"test@ik.com"</span>,</span><br><span class="line">    <span class="attr">"phone"</span>: <span class="string">"123456789"</span>,</span><br><span class="line">    <span class="attr">"Role"</span>: &#123;</span><br><span class="line">      <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">      <span class="attr">"name"</span>: <span class="string">"admin"</span>,</span><br><span class="line">      <span class="attr">"remark"</span>: <span class="string">"manager for this sysstem"</span>,</span><br><span class="line">      <span class="attr">"Perms"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"id"</span>: <span class="number">1</span>,</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"UserControl.AddUser"</span>,</span><br><span class="line">          <span class="attr">"remark"</span>: <span class="string">"add user"</span>,</span><br><span class="line">          <span class="attr">"Roles"</span>: <span class="literal">null</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"id"</span>: <span class="number">2</span>,</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"UserControl.DelUser"</span>,</span><br><span class="line">          <span class="attr">"remark"</span>: <span class="string">"delet user"</span>,</span><br><span class="line">          <span class="attr">"Roles"</span>: <span class="literal">null</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"id"</span>: <span class="number">3</span>,</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"UserControl.UpdateUser"</span>,</span><br><span class="line">          <span class="attr">"remark"</span>: <span class="string">"update user"</span>,</span><br><span class="line">          <span class="attr">"Roles"</span>: <span class="literal">null</span></span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          <span class="attr">"id"</span>: <span class="number">4</span>,</span><br><span class="line">          <span class="attr">"name"</span>: <span class="string">"UserControl.QueryUser"</span>,</span><br><span class="line">          <span class="attr">"remark"</span>: <span class="string">"query user"</span>,</span><br><span class="line">          <span class="attr">"Roles"</span>: <span class="literal">null</span></span><br><span class="line">        &#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"total"</span>: <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color2">c</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">go</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">list</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">beego</a>
         		</li>
       		
 		</ul>
 	</div>
 
-          
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -206,17 +219,62 @@
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2019/04/19/mysql_transaction_deadlock/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          beego orm使用Mysql事务死锁
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2019/03/29/mysql_virtual_column/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">使用MySQL 5.7虚拟列提高查询效率</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+  
+  
   
 
-    
+  
+
+  
+
+  
 
 
           </div>
@@ -239,9 +297,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
+		isPost: true,
 		isArchive: false,
-		isTag: true,
+		isTag: false,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,
