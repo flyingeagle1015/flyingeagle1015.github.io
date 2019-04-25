@@ -6,20 +6,20 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>beego orm使用Mysql事务死锁 | 水镜先生的博客</title>
+  <title>golang中WaitGroup的一点坑 | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="问题现象在beego项目中添加用户的过程中出现mysql死锁。示例代码：1234567891011121314151617def add_user(userdata User) (id int, err error) &amp;#123;  o := orm.NewOrm()  err = o.Begin()	defer func() &amp;#123;		if err == nil &amp;#123;			if e">
-<meta name="keywords" content="beego,mysql">
+  <meta name="description" content="Golang中WaitGroup使用的一点坑Golang 中的 WaitGroup 一直是同步 goroutine 的推荐实践。 坑112345678910111213141516171819202122package mainimport (  &quot;log&quot;  &quot;sync&quot;)func main() &amp;#123;  wg := sync.WaitGroup&amp;#123;&amp;#125;  for i :=">
+<meta name="keywords" content="go,waitgroup">
 <meta property="og:type" content="article">
-<meta property="og:title" content="beego orm使用Mysql事务死锁">
-<meta property="og:url" content="https://flyingeagle1015.github.io/2019/04/19/mysql_transaction_deadlock/index.html">
+<meta property="og:title" content="golang中WaitGroup的一点坑">
+<meta property="og:url" content="https://flyingeagle1015.github.io/2019/04/22/golang_waitgroup_notice/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
-<meta property="og:description" content="问题现象在beego项目中添加用户的过程中出现mysql死锁。示例代码：1234567891011121314151617def add_user(userdata User) (id int, err error) &amp;#123;  o := orm.NewOrm()  err = o.Begin()	defer func() &amp;#123;		if err == nil &amp;#123;			if e">
+<meta property="og:description" content="Golang中WaitGroup使用的一点坑Golang 中的 WaitGroup 一直是同步 goroutine 的推荐实践。 坑112345678910111213141516171819202122package mainimport (  &quot;log&quot;  &quot;sync&quot;)func main() &amp;#123;  wg := sync.WaitGroup&amp;#123;&amp;#125;  for i :=">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-04-19T10:12:55.041Z">
+<meta property="og:updated_time" content="2019-04-22T02:43:50.554Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="beego orm使用Mysql事务死锁">
-<meta name="twitter:description" content="问题现象在beego项目中添加用户的过程中出现mysql死锁。示例代码：1234567891011121314151617def add_user(userdata User) (id int, err error) &amp;#123;  o := orm.NewOrm()  err = o.Begin()	defer func() &amp;#123;		if err == nil &amp;#123;			if e">
+<meta name="twitter:title" content="golang中WaitGroup的一点坑">
+<meta name="twitter:description" content="Golang中WaitGroup使用的一点坑Golang 中的 WaitGroup 一直是同步 goroutine 的推荐实践。 坑112345678910111213141516171819202122package mainimport (  &quot;log&quot;  &quot;sync&quot;)func main() &amp;#123;  wg := sync.WaitGroup&amp;#123;&amp;#125;  for i :=">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -153,30 +153,36 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-mysql_transaction_deadlock" class="article article-type-post " itemscope="" itemprop="blogPost">
+            <article id="post-golang_waitgroup_notice" class="article article-type-post " itemscope="" itemprop="blogPost">
   <div class="article-inner">
     
       <header class="article-header">
         
   
     <h1 class="article-title" itemprop="name">
-      beego orm使用Mysql事务死锁
+      golang中WaitGroup的一点坑
     </h1>
   
 
         
-        <a href="/2019/04/19/mysql_transaction_deadlock/" class="archive-article-date">
-  	<time datetime="2019-04-19T09:52:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
+        <a href="/2019/04/22/golang_waitgroup_notice/" class="archive-article-date">
+  	<time datetime="2019-04-22T02:04:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
 </a>
         
       </header>
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="问题现象"><a href="#问题现象" class="headerlink" title="问题现象"></a>问题现象</h2><p>在beego项目中添加用户的过程中出现mysql死锁。<br>示例代码：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">def add_user(userdata User) (id <span class="keyword">int</span>, err error) &#123;</span><br><span class="line">  o := orm.NewOrm()</span><br><span class="line">  err = o.Begin()</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> err = o.Commit(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="comment">// ......</span></span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// add user information to user table.</span></span><br><span class="line">  <span class="comment">// add user other information in other table.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+        <h2 id="Golang中WaitGroup使用的一点坑"><a href="#Golang中WaitGroup使用的一点坑" class="headerlink" title="Golang中WaitGroup使用的一点坑"></a>Golang中WaitGroup使用的一点坑</h2><p>Golang 中的 WaitGroup 一直是同步 goroutine 的推荐实践。</p>
+<h2 id="坑1"><a href="#坑1" class="headerlink" title="坑1"></a>坑1</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"log"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  wg := sync.WaitGroup&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">0</span>; i &amp;lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(wg sync.WaitGroup, i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">      wg.Add(<span class="number">1</span>)</span><br><span class="line">      log.Printf(<span class="string">"i:%d"</span>, i)</span><br><span class="line">      wg.Done()</span><br><span class="line">    &#125;(wg, i)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  wg.Wait()</span><br><span class="line"></span><br><span class="line">  log.Println(<span class="string">"exit"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <a id="more"></a>
-<p><strong>查看当前运行的所有事务</strong><br><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM information<span class="emphasis">_schema.INNODB_</span>TRX\G</span><br><span class="line"><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">** 1. row **</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span><span class="strong">*****</span></span><br><span class="line"><span class="code">                    trx_id: 45900</span></span><br><span class="line"><span class="code">                 trx_state: ROLLING BACK</span></span><br><span class="line"><span class="code">               trx_started: 2018-04-09 10:24:38</span></span><br><span class="line"><span class="code">     trx_requested_lock_id: NULL</span></span><br><span class="line"><span class="code">          trx_wait_started: NULL</span></span><br><span class="line"><span class="code">                trx_weight: 30687</span></span><br><span class="line"><span class="code">       trx_mysql_thread_id: 123456</span></span><br><span class="line"><span class="code">                 trx_query: N</span></span><br><span class="line">......</span><br><span class="line">--------------------- </span><br><span class="line">mysql&gt; kill 123456 //强制关闭线程和事务</span><br></pre></td></tr></table></figure></p>
-<p><strong>分析原因</strong><br>由于代码中添加用户失败没有回滚操作，导致事务死锁。修改为：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def add_user(userdata User) (id <span class="keyword">int</span>, err error) &#123;</span><br><span class="line">  o := orm.NewOrm()</span><br><span class="line">  err = o.Begin()</span><br><span class="line">  <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> err = o.Commit(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        o.Rollback()</span><br><span class="line">  ┊ ┊ ┊ <span class="comment">// ......</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      o.Rollback()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// add user information to user table.</span></span><br><span class="line">  <span class="comment">// add user other information in other table.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>运行结果是这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">test@VM-PC:/tmp$ ./demo</span><br><span class="line">2019/04/22 10:05:38 exit</span><br><span class="line">test@VM-PC:/tmp$ ./demo</span><br><span class="line">2019/04/22 10:05:40 i:3</span><br><span class="line">2019/04/22 10:05:40 exit</span><br><span class="line">test@VM-PC:/tmp$ ./demo</span><br><span class="line">2019/04/22 10:05:41 i:4</span><br><span class="line">2019/04/22 10:05:41 i:0</span><br><span class="line">2019/04/22 10:05:41 exit</span><br></pre></td></tr></table></figure></p>
+<p>如果理解了WaitGroup的设计目的就非常容易理解这个问题啦。因为WaitGroup同步的是goroutine,<br>而上面却在goroutine中进行Add(1)操作。因此可能goroutine还没来得及Add(1)已经执行Wait操作了。<br>于是代码改成了这样：</p>
+<h2 id="坑2"><a href="#坑2" class="headerlink" title="坑2"></a>坑2</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"log"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  wg := sync.WaitGroup&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">0</span>; i &amp;lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">    wg.Add(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(wg sync.WaitGroup, i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">      log.Printf(<span class="string">"i:%d"</span>, i)</span><br><span class="line">      wg.Done()</span><br><span class="line">    &#125;(wg, i)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  wg.Wait()</span><br><span class="line"></span><br><span class="line">  log.Println(<span class="string">"exit"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果是这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">test@VM-PC:/tmp$ ./demo</span><br><span class="line">2019/04/22 10:05:59 i:4</span><br><span class="line">2019/04/22 10:05:59 i:1</span><br><span class="line">2019/04/22 10:05:59 i:0</span><br><span class="line">2019/04/22 10:05:59 i:2</span><br><span class="line">2019/04/22 10:05:59 i:3</span><br><span class="line">fatal error: all goroutines are asleep - deadlock!</span><br><span class="line"></span><br><span class="line">goroutine 1 [semacquire]:</span><br><span class="line">sync.runtime_Semacquire(0xc42008a02c)</span><br><span class="line">    /usr/lib/go-1.10/src/runtime/sema.go:56 +0x39</span><br><span class="line">    sync.(*WaitGroup).Wait(0xc42008a020)</span><br><span class="line">    /usr/lib/go-1.10/src/sync/waitgroup.go:129 +0x72</span><br><span class="line">    main.main()</span><br><span class="line">    /tmp/demo.go:20 +0xa2</span><br></pre></td></tr></table></figure></p>
+<p>wg给拷贝传递到了goroutine中，导致只有Add操作，其实Done操作是在wg的<code>副本</code>执行的。<br>因此Wait就死锁了。于是代码改成了这样：</p>
+<h2 id="填坑"><a href="#填坑" class="headerlink" title="填坑"></a>填坑</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">  <span class="string">"log"</span></span><br><span class="line">  <span class="string">"sync"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">  wg := sync.WaitGroup&#123;&#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> i := <span class="number">0</span>; i &amp;lt; <span class="number">5</span>; i++ &#123;</span><br><span class="line">    wg.Add(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(wg *sync.WaitGroup, i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">      log.Printf(<span class="string">"i:%d"</span>, i)</span><br><span class="line">      wg.Done()</span><br><span class="line">    &#125;(&amp;wg, i)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  wg.Wait()</span><br><span class="line"></span><br><span class="line">  log.Println(<span class="string">"exit"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果是这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">test@VM-PC:/tmp$ ./demo</span><br><span class="line">2019/04/22 10:06:42 i:4</span><br><span class="line">2019/04/22 10:06:42 i:1</span><br><span class="line">2019/04/22 10:06:42 i:0</span><br><span class="line">2019/04/22 10:06:42 i:2</span><br><span class="line">2019/04/22 10:06:42 i:3</span><br><span class="line">2019/04/22 10:06:42 exit</span><br></pre></td></tr></table></figure></p>
 
       
 
@@ -190,11 +196,11 @@
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">beego</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">go</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">waitgroup</a>
         		</li>
       		
 		</ul>
@@ -224,18 +230,9 @@
   
 <nav id="article-nav">
   
-    <a href="/2019/04/19/beego-mysql_deadlock/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          beego orm使用Mysql事务死锁
-        
-      </div>
-    </a>
   
-  
-    <a href="/2019/04/19/beego-orm-m2m/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">beego orm多对多关系</div>
+    <a href="/2019/04/19/beego-mysql_deadlock/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">beego orm使用Mysql事务死锁</div>
       <i class="icon-circle-right"></i>
     </a>
   
@@ -361,6 +358,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">beego</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -369,11 +378,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">go</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">beego</a>
+                <a href="javascript:void(0)" class="js-tag color5">waitgroup</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -385,19 +390,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">

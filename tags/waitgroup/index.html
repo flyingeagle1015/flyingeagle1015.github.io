@@ -6,20 +6,15 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link rel="dns-prefetch" href="https://flyingeagle1015.github.io">
-  <title>beego orm使用Mysql事务死锁 | 水镜先生的博客</title>
+  <title>Tag: waitgroup | 水镜先生的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="问题现象在beego项目中添加用户的过程中出现mysql死锁。示例代码：1234567891011121314151617def add_user(userdata User) (id int, err error) &amp;#123;  o := orm.NewOrm()  err = o.Begin()  defer func() &amp;#123;    if err == nil &amp;#123;">
-<meta name="keywords" content="mysql,beego">
-<meta property="og:type" content="article">
-<meta property="og:title" content="beego orm使用Mysql事务死锁">
-<meta property="og:url" content="https://flyingeagle1015.github.io/2019/04/19/beego-mysql_deadlock/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="水镜先生的博客">
+<meta property="og:url" content="https://flyingeagle1015.github.io/tags/waitgroup/index.html">
 <meta property="og:site_name" content="水镜先生的博客">
-<meta property="og:description" content="问题现象在beego项目中添加用户的过程中出现mysql死锁。示例代码：1234567891011121314151617def add_user(userdata User) (id int, err error) &amp;#123;  o := orm.NewOrm()  err = o.Begin()  defer func() &amp;#123;    if err == nil &amp;#123;">
 <meta property="og:locale" content="zh">
-<meta property="og:updated_time" content="2019-04-19T10:20:17.211Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="beego orm使用Mysql事务死锁">
-<meta name="twitter:description" content="问题现象在beego项目中添加用户的过程中出现mysql死锁。示例代码：1234567891011121314151617def add_user(userdata User) (id int, err error) &amp;#123;  o := orm.NewOrm()  err = o.Begin()  defer func() &amp;#123;    if err == nil &amp;#123;">
+<meta name="twitter:title" content="水镜先生的博客">
   
     <link rel="alternative" href="/atom.xml" title="水镜先生的博客" type="application/atom+xml">
   
@@ -153,54 +148,52 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-beego-mysql_deadlock" class="article article-type-post " itemscope="" itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      beego orm使用Mysql事务死锁
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2019" class="archive-year">2019</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2019/04/22/golang_waitgroup_notice/" class="archive-article-date">
+  	<time datetime="2019-04-22T02:04:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-22</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2019/04/22/golang_waitgroup_notice/">golang中WaitGroup的一点坑</a>
     </h1>
   
 
-        
-        <a href="/2019/04/19/beego-mysql_deadlock/" class="archive-article-date">
-  	<time datetime="2019-04-19T09:52:39.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2019-04-19</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="问题现象"><a href="#问题现象" class="headerlink" title="问题现象"></a>问题现象</h2><p>在beego项目中添加用户的过程中出现mysql死锁。<br>示例代码：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">def add_user(userdata User) (id <span class="keyword">int</span>, err error) &#123;</span><br><span class="line">  o := orm.NewOrm()</span><br><span class="line">  err = o.Begin()</span><br><span class="line">  <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> err = o.Commit(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="comment">// ......</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// add user information to user table.</span></span><br><span class="line">  <span class="comment">// add user other information in other table.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<a id="more"></a>
-<p><strong>查看当前运行的所有事务</strong><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; SELECT * FROM information_schema.INNODB_TRX\G</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">                    trx_id: 45900</span><br><span class="line">                 trx_state: ROLLING BACK</span><br><span class="line">               trx_started: 2018-04-09 10:24:38</span><br><span class="line">     trx_requested_lock_id: NULL</span><br><span class="line">          trx_wait_started: NULL</span><br><span class="line">                trx_weight: 30687</span><br><span class="line">       trx_mysql_thread_id: 123456</span><br><span class="line">                 trx_query: N</span><br><span class="line">......</span><br><span class="line">--------------------- </span><br><span class="line">mysql&gt; kill 123456 //强制关闭线程和事务</span><br></pre></td></tr></table></figure></p>
-<p><strong>分析原因</strong><br>由于代码中添加用户失败没有回滚操作，导致事务死锁。修改为：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">def add_user(userdata User) (id <span class="keyword">int</span>, err error) &#123;</span><br><span class="line">  o := orm.NewOrm()</span><br><span class="line">  err = o.Begin()</span><br><span class="line">  <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> err = o.Commit(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        o.Rollback()</span><br><span class="line">        <span class="comment">// ......</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">      o.Rollback()</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;()</span><br><span class="line">  <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// add user information to user table.</span></span><br><span class="line">  <span class="comment">// add user other information in other table.</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
+        <div class="article-info info-on-right">
+          
 	<div class="article-tag tagcloud">
 		<i class="icon-price-tags icon"></i>
 		<ul class="article-tag-list">
 			 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">mysql</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">go</a>
         		</li>
       		 
         		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color1">beego</a>
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color5">waitgroup</a>
         		</li>
       		
 		</ul>
 	</div>
 
-      
+          
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -213,62 +206,17 @@
 	</div>
 
 
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
+        </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2019/04/22/golang_waitgroup_notice/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          golang中WaitGroup的一点坑
-        
-      </div>
-    </a>
   
   
-    <a href="/2019/04/19/beego-orm-m2m/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">beego orm多对多关系</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
-
-  
+    
 
 
           </div>
@@ -291,9 +239,9 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
+		isPost: false,
 		isArchive: false,
-		isTag: false,
+		isTag: true,
 		isCategory: false,
 		open_in_new: false,
 		toc_hide_index: true,

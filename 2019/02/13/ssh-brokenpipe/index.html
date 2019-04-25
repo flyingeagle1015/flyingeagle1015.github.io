@@ -173,8 +173,8 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h3><p>I use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.<br>Every time I try to connect, SSH fails with<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">packet_write_wait:<span class="built_in"> Connection </span><span class="keyword">to</span> xxx<span class="built_in"> port </span>22: Broken pipe</span><br></pre></td></tr></table></figure></p>
-<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>added “IPQoS throughput” to my ssh_config and now I can connect to all hosts again!<br><figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"IPQoS throughput"</span> | sudo tee -a <span class="meta-keyword">/etc/</span>ssh/ssh_config <span class="comment">// -a 是追加的意思，等同于 &gt;&gt;</span></span><br></pre></td></tr></table></figure></p>
+        <h3 id="Problem"><a href="#Problem" class="headerlink" title="Problem"></a>Problem</h3><p>I use Manjaro Linux at my workplace in a virtual machine hosted by VMWare Workstation. Today I am experiencing issues when I try to connect to servers via ssh.<br>Every time I try to connect, SSH fails with<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br><span class="line">packet_write_wait: Connection to xxx port 22: Broken pipe</span><br></pre></td></tr></table></figure></p>
+<h3 id="Solution"><a href="#Solution" class="headerlink" title="Solution"></a>Solution</h3><p>added “IPQoS throughput” to my ssh_config and now I can connect to all hosts again!<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo &quot;IPQoS throughput&quot; | sudo tee -a /etc/ssh/ssh_config // -a 是追加的意思，等同于 &gt;&gt;</span><br></pre></td></tr></table></figure></p>
 
       
 
@@ -355,6 +355,18 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
           <ul class="article-tag-list" q-show="showTags">
              
               <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">beego</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color3">go</a>
+              </li>
+             
+              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color2">c</a>
               </li>
              
@@ -363,11 +375,7 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color3">go</a>
-              </li>
-             
-              <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">beego</a>
+                <a href="javascript:void(0)" class="js-tag color5">waitgroup</a>
               </li>
              
               <li class="article-tag-list-item">
@@ -379,19 +387,15 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color1">mysql</a>
-              </li>
-             
-              <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color5">blog</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
+                <a href="javascript:void(0)" class="js-tag color2">python</a>
               </li>
              
               <li class="article-tag-list-item">
-                <a href="javascript:void(0)" class="js-tag color2">python</a>
+                <a href="javascript:void(0)" class="js-tag color4">ssh</a>
               </li>
              
               <li class="article-tag-list-item">
